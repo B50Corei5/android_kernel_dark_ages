@@ -73,6 +73,7 @@ read choice
 if [ "$choice" == "1" ]; then
   echo -e "\n$green[1] Non-Treble"
   echo -e "[2] Treble"
+  echo -e "[3] MIUI"
   echo -ne "\n$brown(i) Select Kernel Variant[1-2]:$nc "
 read type
   if [[ "$type" == "1" ]]; then
@@ -86,7 +87,12 @@ read type
     git checkout darky-treble &>/dev/null
     echo -e "$blue\nSwitched to Treble Branch"
   fi
-  
+   
+  if [[ "$type" == "3" ]]; then
+    #change to miui branch before proceeding
+    git checkout darky-miui &>/dev/null
+    echo -e "$blue\nSwitched to MIUI branch"
+  fi
 echo -e "\n$green[1] Stock GCC"
 echo -e "[2] Stock Clang"
 echo -e "[3] Custom Toolchain"
@@ -232,6 +238,13 @@ if [ "$choice" == "4" ]; then
   fi
    if [[ "$type" == "2" && "$TC" == "2" || "$customTC" == "4" ]]; then
     make tclang &>/dev/null
+  fi
+
+  if [[ "$type" == "3" && "$TC" == "1" || "$customTC" == "1" || "$customTC" == "2" || "$customTC" == "3" ]]; then
+    make miui &>/dev/null
+  fi
+  if [[ "$type" == "3" && "$TC" == "2" || "$customTC" == "4" ]]; then
+    make mclang &>/dev/null
   fi
   cd ..
   echo -e "$purple(i) Flashable zip generated under $ZIP_DIR.$nc"
